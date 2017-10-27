@@ -41,6 +41,31 @@ void print_All_SubSets(vector<int> &A, vector<vector<int> > &sol_set)
 	subset_util(currSol, 0, A, sol_set); 
 }
 
+void unique_subSet_Util(vector<int> &curr_sol, int i, vector<int> &A, vector<vector<int> > &sol_set)
+{
+	if (i == A.size())
+	{
+		sol_set.push_back(curr_sol);
+		return; 
+	}
+
+	//take ith element
+	curr_sol.push_back(A[i]);
+	unique_subSet_Util(curr_sol, i + 1, A, sol_set);
+
+	//Or don't take ith element
+	curr_sol.pop_back();
+	while (i < A.size() - 1 && A[i + 1] == A[i]) { i++;  }
+	unique_subSet_Util(curr_sol, i + 1, A, sol_set);
+}
+
+void print_Unique_Subsets(vector<int> &A, vector<vector<int> > &sol_set)
+{
+	vector<int> curr_set;
+
+	unique_subSet_Util(curr_set, 0, A, sol_set);
+}
+
 void print_solution(vector<vector<int> > &sol_set)
 {
 	for (int i = 0; i < sol_set.size(); i++)
@@ -66,13 +91,18 @@ int main()
 
 	sort(A.begin(), A.end());
 
-	vector<vector<int> > sol_set;
+	vector<vector<int> > sol_set, sol_set2;
 
 	print_All_SubSets(A, sol_set);
 
 	sort(sol_set.begin(), sol_set.end());
 
 	print_solution(sol_set);
+
+	cout << "UNIQUE COMBOS........." << endl;
+	print_Unique_Subsets(A, sol_set2);
+	sort(sol_set2.begin(), sol_set2.end());
+	print_solution(sol_set2);
     return 0;
 }
 
